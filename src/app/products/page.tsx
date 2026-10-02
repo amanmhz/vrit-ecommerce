@@ -2,11 +2,18 @@ import { getProductCategory, getProducts } from '@/services/productService';
 import ProductsContent from './ProductsContent';
 import { ProductFilters } from '@/types/product';
 
-export default async function ProductsPage({searchParams}: {searchParams: Promise<{sort: string}>}) {
+// Force dynamic rendering for search params
+export const dynamic = 'force-dynamic';
+
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ sort?: string }>;
+}) {
   try {
     const params = await searchParams;
     const filters: ProductFilters = {
-      sort: params.sort as 'asc' | 'desc',
+      sort: (params.sort as 'asc' | 'desc') || 'asc',
     };
 
     const products = await getProducts(filters);
